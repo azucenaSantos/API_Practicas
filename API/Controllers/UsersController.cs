@@ -7,9 +7,9 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")] //api/users --> asi es como accedemos a este controlador
-    public class UsersController : ControllerBase
+    public class UsersController : ControllerBase //ControllerBase es una clase base para controladores de API que no requieren vistas
     {
-        private readonly DataContext _context;
+        private readonly DataContext _context; //Inyectamos el contexto de datos para acceder a la base de datos
 
         public UsersController(DataContext context)
         {
