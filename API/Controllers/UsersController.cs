@@ -1,6 +1,7 @@
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -17,15 +18,15 @@ namespace API.Controllers
 
         //Endpoint para obtener todos los usuarios
         [HttpGet] //GET api/users
-        public ActionResult<IEnumerable<AppUser>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            var users= _context.Users.ToList(); //Obtenemos todos los usuarios de la base de datos
+            var users= await _context.Users.ToListAsync(); //Obtenemos todos los usuarios de la base de datos
             return users; //Retornamos la lista de usuarios
         }
 
         //Endpoint para obtener un usuario solo x id
         [HttpGet("{id}")] //GET api/users/1 --> especificamos el id del usuario a obtener
-        public ActionResult<AppUser> GetUser(int id) //Solo devuelve un usuario, pasamos id por argumento
+        public async Task<ActionResult<AppUser>> GetUser(int id) //Solo devuelve un usuario, pasamos id por argumento
         {
             /*var user = _context.Users.Find(id); //Buscamos el usuario por su id en la lista de usuario
             if (user == null) //Si no existe el usuario
@@ -33,7 +34,7 @@ namespace API.Controllers
                 return NotFound(); //Retornamos un 404 Not Found
             }
             return user; //Retornamos el usuario encontrado*/
-            return _context.Users.Find(id);
+            return await _context.Users.FindAsync(id);
         }
     }
 }
