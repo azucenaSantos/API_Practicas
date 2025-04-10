@@ -4,7 +4,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class WeatherForecastController : BaseApiController //Hereda de BaseApiController para tener acceso a los metodos y propiedades de la clase base
 {
     private static readonly string[] Summaries = new[]
     {

@@ -5,9 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] //api/users --> asi es como accedemos a este controlador
-    public class UsersController : ControllerBase //ControllerBase es una clase base para controladores de API que no requieren vistas
+    /*[ApiController]
+    [Route("api/[controller]")] //api/users --> asi es como accedemos a este controlador*/
+
+    //No necesitamos lo anterior porque UserController hereda de BaseApiController
+    public class UsersController : BaseApiController //ControllerBase es una clase base para controladores de API que no requieren vistas
     {
         private readonly DataContext _context; //Inyectamos el contexto de datos para acceder a la base de datos
 
