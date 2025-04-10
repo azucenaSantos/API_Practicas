@@ -14,13 +14,13 @@ builder.Services.AddDbContext<DataContext>(opt =>
     //le pasamos una cadena de conexion, que obtenemos de la configuracion
 });
 
-builder.Services.AddCors();
-
+builder.Services.AddCors(); //Servicio de CORS para permitir el acceso desde el frontend
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseCors(builder=> builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+//Añadimos el middleware de CORS para permitir el acceso desde el frontend
+app.UseCors(builder=> builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
 app.MapControllers();
 
