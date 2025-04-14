@@ -2,15 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>disable</Nullable>
+    <Nullable>disable</Nullable> <!--Si lo dejamos en enabled, todos los campos son required, si no tenemos que especificar 
+    cual es required en los props para que en la migracion de la  bd se considere ese requisito-->
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
   </ItemGroup> 
 </Project>

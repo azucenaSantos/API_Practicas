@@ -1,5 +1,6 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace API.Controllers
     /*[ApiController]
     [Route("api/[controller]")] //api/users --> asi es como accedemos a este controlador*/
 
+    [Authorize] //Requiere autenticacion para acceder a TODOS los endpoint(httpget, httpgetId) --> solo los usuarios autenticados (pasan un token) pueden acceder a este controlador
     //No necesitamos lo anterior porque UserController hereda de BaseApiController
     public class UsersController : BaseApiController //ControllerBase es una clase base para controladores de API que no requieren vistas
     {
@@ -18,11 +20,12 @@ namespace API.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         //Endpoint para obtener todos los usuarios
         [HttpGet] //GET api/users
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            var users= await _context.Users.ToListAsync(); //Obtenemos todos los usuarios de la base de datos
+            var users = await _context.Users.ToListAsync(); //Obtenemos todos los usuarios de la base de datos
             return users; //Retornamos la lista de usuarios
         }
 

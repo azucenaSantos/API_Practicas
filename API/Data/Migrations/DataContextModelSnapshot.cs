@@ -33,7 +33,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Example", b =>
@@ -50,7 +50,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Examples");
+                    b.ToTable("Examples", (string)null);
                 });
 #pragma warning restore 612, 618
         }

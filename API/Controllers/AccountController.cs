@@ -1,9 +1,10 @@
-
 using System.Security.Cryptography;
 using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +13,17 @@ namespace API.Controllers
     public class AccountController : BaseApiController //Hereda de BaseApiController
     {
         private readonly DataContext _context;
+        private readonly ITokenService _tokenService; //Interfaz para el token
 
-        public AccountController(DataContext context)
+
+        public AccountController(DataContext context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService; //Inyectamos el servicio de token
         }
 
         [HttpPost("register")] //POST: api/account/register
-        public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto) //en vez de pasar nombre y contra pasamos un objeto con esas propiedades
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto) //en vez de pasar nombre y contra pasamos un objeto con esas propiedades
         {
 
             if (await UserExists(registerDto.UserName)) //Verificamos si el usuario ya existe con el metodo privado
@@ -40,8 +44,39 @@ namespace API.Controllers
             //Para guardar al usuario debemos hacer:
             await _context.SaveChangesAsync(); //Guarda los cambios en la base de datos
 
-            //Como el el método especificamos que devolvemos un AppUser, debemos devolverlo
-            return user; //Devolvemos el usuario creado
+            return new UserDto
+            {
+                Username = user.UserName, //Devolvemos el nombre de usuario
+                Token = _tokenService.CreateToken(user) //Devolvemos el token creado por el servicio de token
+            }; //Devolvemos el usuario creado
+        }
+
+        [HttpPost("login")] //POST: api/account/login
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        {
+            //Recibimos un objeto "loginDto" con el nombre de usuario y la contraseña
+            //Buscamos el usuario en la base de datos
+            var user = await _context.Users.SingleOrDefaultAsync(x =>
+            x.UserName == loginDto.UserName); //Buscamos el usuario en la base de datos
+                                              //Si no existe nos dará null por la funcion
+
+            if (user == null) return Unauthorized("Invalid username"); //Si no existe devolvemos un error 401
+
+            //Comprobamos la password
+            using var hmac = new HMACSHA512(user.PasswordSalt); //Generamos el hash de la contraseña que se pasó anteriormente
+            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+            for (int i = 0; i < computedHash.Length; i++)
+            {
+                if (computedHash[i] != user.PasswordHash[i])
+                {
+                    return Unauthorized("Invalid password"); //Si la contraseña no coincide devolvemos un error 401
+                }
+            }
+            return new UserDto
+            {
+                Username = user.UserName, //Devolvemos el nombre de usuario
+                Token = _tokenService.CreateToken(user) //Devolvemos el token creado por el servicio de token
+            }; //Devolvemos el usuario creado
         }
 
         //Verificamos si el usuario ya existe
