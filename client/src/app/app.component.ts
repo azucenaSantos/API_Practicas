@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from './_services/account.service';
+import { User } from './_models/user';
 
 @Component({
   selector: 'app-root',
@@ -13,17 +14,22 @@ export class AppComponent implements OnInit {
   users: any; //Variable para almacenar los usuarios, de tipo cualquiera, de momento
 
   //Constructor de la clase
-  constructor(private htttp: HttpClient) {
+  constructor(private accountService: AccountService) {
+    //Aqui inyectamos el servicio AccountService
     //Recibimos el servicio HttpClient en el constructor
   }
   //Metodo que se ejecuta al iniciar el componente
   ngOnInit(): void {
-    //llamamos al servidor de la API para obtener los usuarios
-    this.htttp.get('https://localhost:5001/api/users').subscribe({
-      next: (response) => (this.users = response), //si la peticion es correcta, almacenamos los usuarios en la variable users
-      error: (error) => console.log(error), //si hay un error, lo mostramos por consola
-      complete: () => console.log('Peticion completa'), //cuando la peticion se completa, mostramos un mensaje por consola
-    });
-    //el get devuelve un "observable", por lo que debemos suscribirnos a el para obtener los datos
+    ///this.getUsers(); //Llamamos al metodo getUsers para obtener los usuarios
+    this.setCurrentUser(); //Llamamos al metodo setCurrentUser para setear el usuario actual
+  }
+
+  //Metodo para setear el usuario actual
+  setCurrentUser() {
+    const userString = localStorage.getItem('user'); //Obtenemos el usuario del local storage
+    if (!userString) return; //Si no hay usuario, no hacemos nada
+    //Si si hay usuario, parseamos el string a un objeto de tipo User
+    const user: User = JSON.parse(userString);
+    this.accountService.setCurrentUser(user); //Llamamos al metodo setCurrentUser del servicio AccountService
   }
 }
