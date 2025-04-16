@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { User } from '../_models/user';
+import { environment } from 'src/environments/environment';
 
 //Los servicios de angular pueden ser injectables en los componentes o en otros servicios
 @Injectable({
@@ -10,7 +11,7 @@ import { User } from '../_models/user';
 export class AccountService {
   //Servicio responsable de hacer las peticiones HTTP desde
   //el cliente al servidor --> centralizacion de las peticiones HTTP
-  baseUrl = 'https://localhost:5001/api/'; //URL base de la API
+  baseUrl = environment.apiUrl; //URL base de la API
 
   //Podemos acceder a este observable desde cualquier componente, cosa que con la almacenacion del localStorage solo podriamos acceder desde el nav 
   private currentUserSource= new BehaviorSubject<User | null>(null); //Creamos un observable que almacena el usuario actual 
