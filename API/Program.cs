@@ -1,5 +1,7 @@
+using API.Data;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,5 +24,18 @@ app.UseAuthentication(); //Middleware de autenticacion --> ¿Token valido?
 app.UseAuthorization(); //Middleware de autorizacion --> Token valido, ¿Qué tienes permitido hacer?
 
 app.MapControllers();
+
+//Cuando se inicia la app:
+using var scope= app.Services.CreateScope(); //ACCESO A TODOS LOS SERVICIOS CREADOS DENTRO DE ESTA CLASE
+var services= scope.ServiceProvider;
+try{
+    var context= services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync(); //crea todo de nuevo, bd y semilla
+    await Seed.SeedUsers(context);    
+}catch(Exception ex){
+    var logger= services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error ocurred during migration");
+}
+
 
 app.Run();

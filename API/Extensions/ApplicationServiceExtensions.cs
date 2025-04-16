@@ -26,6 +26,8 @@ namespace API.Extensions
             //Añadimos el servicio que hemos creado manualmente, sin ser del framwork
             services.AddScoped<ITokenService, TokenService>(); //Implementa la interfaz y el la clase del servicio creado
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             //Retornamos una coleccione de servicios
             return services; //Retornamos la coleccion de servicios para que se pueda usar en el programa.cs
         }

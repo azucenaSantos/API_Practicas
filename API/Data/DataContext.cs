@@ -10,7 +10,6 @@ namespace API.Data
         {            
         }
 
-        public DbSet <AppUser> Users { get; set; }
-        public DbSet <Example> Examples { get; set; }
+        public DbSet <AppUser> Users { get; set; } //Tabla llamada Users en la base de datos
     }
 }

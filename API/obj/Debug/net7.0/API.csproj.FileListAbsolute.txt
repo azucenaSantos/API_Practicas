@@ -80,3 +80,6 @@ C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\obj\Debug\net7.0\refint\API.dll
 C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\obj\Debug\net7.0\API.pdb
 C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\obj\Debug\net7.0\API.genruntimeconfig.cache
 C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\obj\Debug\net7.0\ref\API.dll
+C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\bin\Debug\net7.0\Data\UserSeedData.json
+C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\PRACTICAS\Desktop\demo\DatingApp\API\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

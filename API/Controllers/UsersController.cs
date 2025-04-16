@@ -1,5 +1,8 @@
 using API.Data;
+using API.DTOs;
 using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,33 +16,33 @@ namespace API.Controllers
     //No necesitamos lo anterior porque UserController hereda de BaseApiController
     public class UsersController : BaseApiController //ControllerBase es una clase base para controladores de API que no requieren vistas
     {
-        private readonly DataContext _context; //Inyectamos el contexto de datos para acceder a la base de datos
-
-        public UsersController(DataContext context)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        [AllowAnonymous]
         //Endpoint para obtener todos los usuarios
         [HttpGet] //GET api/users
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync(); //Obtenemos todos los usuarios de la base de datos
-            return users; //Retornamos la lista de usuarios
+            //return Ok(await _userRepository.GetUsersAsync()); 
+            //Nos da un problema de bucle de objetos porque está en bucle entre el appuser y el photo -> mappeador solucion
+            var users= await _userRepository.GetMembersAsync(); 
+
+            var usersToReturn= _mapper.Map<IEnumerable<MemberDto>>(users);
+            return Ok(usersToReturn);
         }
 
         //Endpoint para obtener un usuario solo x id
-        [HttpGet("{id}")] //GET api/users/1 --> especificamos el id del usuario a obtener
-        public async Task<ActionResult<AppUser>> GetUser(int id) //Solo devuelve un usuario, pasamos id por argumento
+        [HttpGet("{username}")]
+        public async Task<ActionResult<MemberDto>> GetUser(string username) 
         {
-            /*var user = _context.Users.Find(id); //Buscamos el usuario por su id en la lista de usuario
-            if (user == null) //Si no existe el usuario
-            {
-                return NotFound(); //Retornamos un 404 Not Found
-            }
-            return user; //Retornamos el usuario encontrado*/
-            return await _context.Users.FindAsync(id);
+            //hacemos lo mismo y mapeamos los resultados:
+            return await _userRepository.GetMemberAsync(username);
+
         }
     }
 }
