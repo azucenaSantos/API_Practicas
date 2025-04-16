@@ -38,7 +38,7 @@ export class NavComponent implements OnInit {
     //Como lo que devuelve la funcion de login es un obvservable, se puede subscribir a el
     this.accountService.login(this.model).subscribe({
       next: () => this.router.navigateByUrl('/members'), //cuando iniciamos sesion se dirige a x pagina determinada
-      error: error => this.toaster.error(error.error) //en el toaster se mostrará el error
+      //error: error => this.toaster.error(error.error) //en el toaster se mostrará el error -> borramos porque esta controlado por el interceptor ahora
     })
   }
 

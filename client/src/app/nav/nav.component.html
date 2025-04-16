@@ -2,7 +2,7 @@
   <div class="container">
     <a class="navbar-brand" routerLink="/" routerLinkActive="active">Dating App</a>
     
-    <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="accountService.currentUser$ | async"> <!--condicion de angular, muestra contenido si la condicion es cierta, cuando el pipe tenga resultados-->
+    <ul class="navbar-nav me-auto mb-2 mb-md-0"> <!--condicion de angular, muestra contenido si la condicion es cierta, cuando el pipe tenga resultados-->
       <!--si el currentUser no es null, entonces sabemos que estamos conectados a la pagina asi que se muestra el ul-->  
       <!--LAS DIRECTIVAS DE ANGULAR NO OCULTAN EL CONTENIDO, LO BORRAN DIRECTAMENTE DEL DOM-->
       <ng-container *ngIf="accountService.currentUser$ | async"> <!--oculta los links si el usuario no está autenticado-->
@@ -16,6 +16,9 @@
           <a class="nav-link" routerLink="/messages"  routerLinkActive="active">Messages</a>
         </li>
       </ng-container>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/errors"  routerLinkActive="active">Errors</a>
+      </li>
     </ul>
     
     <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown> <!--solo se muestra el desplegable al estar logeado, el pipe tiene contenido-->
